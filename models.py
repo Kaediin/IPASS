@@ -35,15 +35,16 @@ class Dataset:
         self.candidates = candidates_models
         return self.candidates
 
-    def getRandomUserEmptyTraits(self):
+    def get_random_user(self, empty_traits=True):
         candidate = random.choice(self.candidates)
         self.candidates.remove(candidate)
-        for i, row in enumerate(candidate.scores.__dict__.items()):
-            if i >= len(candidate.scores.__dict__) / 2:
-                candidate.scores.__dict__[row[0]] = 0
+        if empty_traits:
+            for i, row in enumerate(candidate.scores.__dict__.items()):
+                if i >= len(candidate.scores.__dict__) / 2:
+                    candidate.scores.__dict__[row[0]] = 0
         return candidate
 
-    def getSimilarCandidates(self, user, threshold=1):
+    def get_similar_candidates(self, user, threshold=1):
         traits = [k for k, v in user.scores.__dict__.items() if v != 0]
         similar_scoring_cadidates = []
         for candidate in self.candidates:
@@ -162,4 +163,4 @@ class Engine:
 
     def calculate_mode_score(self, trait_name):
         sim_scores = Counter(candidate.scores.__dict__[trait_name] for candidate in self.candidates)
-        return sim_scores.most_common(1)[0][0]
+        return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
