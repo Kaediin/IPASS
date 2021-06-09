@@ -1,6 +1,6 @@
 import csv
 import random
-
+from collections import Counter
 from dataclasses import dataclass
 
 TRAIT_KEYWORDS = ['Aanzien', 'Beheerst', 'Behoudend', 'Belangstellend', 'Bemiddelaar', 'Bestuurder', 'Betrokken',
@@ -161,4 +161,5 @@ class Engine:
         return sum(scores) / float(len(scores))
 
     def calculate_mode_score(self, trait_name):
-        pass
+        sim_scores = Counter(candidate.scores.__dict__[trait_name] for candidate in self.candidates)
+        return sim_scores.most_common(1)[0][0]
