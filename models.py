@@ -43,6 +43,20 @@ class Dataset:
                 candidate.scores.__dict__[row[0]] = 0
         return candidate
 
+    def getSimilarCandidates(self, user, threshold=1):
+        traits = [k for k, v in user.scores.__dict__.items() if v != 0]
+        similar_scoring_cadidates = []
+        for candidate in self.candidates:
+            has_higher_threshold_value = False
+            for trait in traits:
+                if int(candidate.scores.__dict__[trait]) != 0 and int(user.scores.__dict__[trait]) != 0:
+                    if abs(int(candidate.scores.__dict__[trait]) - int(user.scores.__dict__[trait])) > threshold:
+                        has_higher_threshold_value = True
+                        break
+            if not has_higher_threshold_value:
+                similar_scoring_cadidates.append(candidate)
+        return similar_scoring_cadidates
+
 
 @dataclass(frozen=False)
 class TraitScores:
