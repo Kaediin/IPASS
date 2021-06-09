@@ -163,4 +163,6 @@ class Engine:
 
     def calculate_mode_score(self, trait_name):
         sim_scores = Counter(candidate.scores.__dict__[trait_name] for candidate in self.candidates)
+        if len(sim_scores.values()) == 0:
+            return None, None
         return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
