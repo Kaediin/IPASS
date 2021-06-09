@@ -159,3 +159,6 @@ class Engine:
     def calculate_mean_score(self, trait_name):
         scores = [int(candidate.scores.__dict__[trait_name]) for candidate in self.candidates]
         return sum(scores) / float(len(scores))
+
+    def calculate_mode_score(self, trait_name):
+        pass

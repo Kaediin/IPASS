@@ -33,7 +33,8 @@ if __name__ == '__main__':
 
     key = 'Belangstellend'
     engine = Engine(user=user, candidates=similars)
-    print(user.scores.__dict__[key], engine.calculate_mean_score(key))
+    prediction_mean = engine.calculate_mean_score(key)
+
 
 
 
