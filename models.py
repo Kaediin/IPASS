@@ -146,3 +146,16 @@ class Candidate:
     id: int
     research_id: str
     scores: TraitScores
+
+
+@dataclass(frozen=False)
+class Engine:
+    candidates: list
+    user: Candidate
+
+    def get_scored_traits(self):
+        return [k for k, v in self.user.scores.__dict__.items() if v != 0]
+
+    def calculate_mean_score(self, trait_name):
+        scores = [int(candidate.scores.__dict__[trait_name]) for candidate in self.candidates]
+        return sum(scores) / float(len(scores))

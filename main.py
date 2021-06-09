@@ -25,20 +25,15 @@ def getRandomUserEmptyTraits(candidates):
 #         f'Most common score on trait "{key}": {sim_scores.most_common(1)[0][0]}. User scored: {user.scores.__dict__[key]}')
 
 
-# def predictScoreBasedOnAverage(candidates, user, key='Zorgvuldig'):
-#     traits = TRAIT_KEYWORDS.copy()
-#     traits.remove(key)
-#     scores = [int(candidate.scores.__dict__[key]) for candidate in candidates]
-#     print(f'Average score for trait "{key}": {round(sum(scores)/float(len(scores)))}')
-
-
 if __name__ == '__main__':
     dataset = Dataset(['data/dataset_2017.csv'])
     dataset.load()
     user = dataset.getRandomUserEmptyTraits()
-    print(len(dataset.getSimilarCandidates(user)))
-    # candidates = getAllCandidates(['data/dataset_2017.csv'])
-    # print(len(candidates))
-    # user = getRandomUserEmptyTraits(candidates)
-    # predictScoreBasedOnOthers(candidates, user)
-    # predictScoreBasedOnAverage(candidates, user)
+    similars = dataset.getSimilarCandidates(user)
+
+    key = 'Belangstellend'
+    engine = Engine(user=user, candidates=similars)
+    print(user.scores.__dict__[key], engine.calculate_mean_score(key))
+
+
+
