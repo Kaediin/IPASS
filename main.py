@@ -59,6 +59,30 @@ def plot_x_candidates(dataset, x=101):
     plot.show()
 
 
+def plot_x_traits(dataset):
+    p_mode, p_mean = [], []
+    for i in range(79):
+        user, old_user = dataset.get_random_user(limit=i)
+        similars = dataset.get_similar_candidates(user)
+        engine = Engine(user=user, candidates=similars)
+
+        user_mode, user_mean = compute_predictions(user, engine)
+        p_mode.append(calculate_similarities(old_user.scores.__dict__.values(), user_mode.scores.__dict__.values()))
+        p_mean.append(calculate_similarities(old_user.scores.__dict__.values(), user_mean.scores.__dict__.values()))
+
+    plot.plot(p_mode, label="Mode")
+    plot.plot(p_mean, label="Mean")
+    plot.text(0, 25, f'Average mode: {calculate_average_accuracy(p_mode)}%', color='blue')
+    plot.text(0, 20, f'Average mean: {calculate_average_accuracy(p_mean)}%', color='orange')
+    plot.yticks([i * 10 for i in range(11)])
+    plot.ylabel("Prediction-algorithm accuracy in %")
+    plot.xlabel("# of pre-determined traits")
+    plot.legend()
+    plot.savefig('plot_output/plot_mode_mean.png')
+    plot.show()
+
+
 if __name__ == '__main__':
     dataset = get_dataset(['data/dataset_2017.csv'])
-    plot_x_candidates(dataset)
+    # plot_x_candidates(dataset)
+    plot_x_traits(dataset)
