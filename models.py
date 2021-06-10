@@ -202,6 +202,7 @@ class TraitScores:
 class Candidate:
     """
     the candidate model used to convert a row of the dataset to an object
+
     Arguments:
         :param id: the unique id of the user
         :param research_id: the unique research-database id
