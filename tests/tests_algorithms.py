@@ -21,8 +21,8 @@ class TestCases(unittest.TestCase):
     def test_no_crash_computations(self):
         dataset = get_dataset(['../data/dataset_2017.csv'])
         user, old_user = dataset.get_random_user()
-        similars = dataset.get_similar_candidates(user)
-        engine = Engine(user=user, candidates=similars)
+        similar = dataset.get_similar_candidates(user)
+        engine = Engine(user=user, candidates=similar)
         try:
             compute_predictions(user, engine)
         except (IndexError, ValueError) as e:
