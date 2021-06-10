@@ -231,6 +231,8 @@ class Engine:
         This class check every score of the user and returns only the scores which have a value
         :return: a list of trait-names which have corresponding values
         """
+        # Check for every item in the dict is the value is not 0. Then we append the key. Else nothing
+        # We do this in a list-comprehension as the runtimes are faster
         return [k for k, v in self.user.scores.__dict__.items() if v != 0]
 
     def calculate_mean_score(self, trait_name):
@@ -239,10 +241,14 @@ class Engine:
         :param trait_name: the name of the trait we want to compute the mean score of
         :return: the mean score of the trait
         """
+        # Get all the scores of the trait given from all the candidates
         scores = [int(candidate.scores.__dict__[trait_name]) for candidate in self.candidates]
+        # If we dont have a single score (ie: we dont have (similar) candidates with a traitscore)
+        # We return a predefined value
         if len(scores) == 0:
             # TODO: Find valid response!
             return random.randint(0, 5)
+        # return the summed up values divided by the lengths. Also known as the mean-value
         return sum(scores) / float(len(scores))
 
     def calculate_mode_score(self, trait_name):
@@ -251,8 +257,12 @@ class Engine:
         :param trait_name: the trait-name we want to predict a score for
         :return: The calculated mean score
         """
+        # Count the amount of time each value has been scored. This result (dict) will look somethin like:
+        # {1: 265, 2: 187, 3: 80, 4: 9, 5: 1}
         sim_scores = Counter(candidate.scores.__dict__[trait_name] for candidate in self.candidates)
+        # Check if we have a value. If not we return a predefined value
         if len(sim_scores.values()) == 0:
             # TODO: Find valid response!
             return random.randint(0, 5), 0
+        # return the most common score and the % of that score to the total amount od scores. This shows the confidence
         return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
