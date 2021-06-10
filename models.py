@@ -1,5 +1,6 @@
 import csv
 import random
+import copy
 from collections import Counter
 from dataclasses import dataclass
 
@@ -38,11 +39,12 @@ class Dataset:
     def get_random_user(self, empty_traits=True):
         candidate = random.choice(self.candidates)
         self.candidates.remove(candidate)
+        old_cadidate = copy.deepcopy(candidate)
         if empty_traits:
             for i, row in enumerate(candidate.scores.__dict__.items()):
                 if i >= len(candidate.scores.__dict__) / 2:
                     candidate.scores.__dict__[row[0]] = 0
-        return candidate
+        return candidate, old_cadidate
 
     def get_similar_candidates(self, user, threshold=1):
         traits = [k for k, v in user.scores.__dict__.items() if v != 0]
@@ -159,6 +161,9 @@ class Engine:
 
     def calculate_mean_score(self, trait_name):
         scores = [int(candidate.scores.__dict__[trait_name]) for candidate in self.candidates]
+        if len(scores) == 0:
+            #TODO: Find valid response!
+            return random.randint(0, 5)
         return sum(scores) / float(len(scores))
 
     def calculate_mode_score(self, trait_name):
