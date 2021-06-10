@@ -1,10 +1,20 @@
+import glob
 import unittest
 
-from main import *
-from models import *
+from main import get_dataset
 
 
 class TestCases(unittest.TestCase):
+
+    def test_has_valid_dataset(self):
+        try:
+            get_dataset(glob.glob('../data/*.csv'))
+        except FileNotFoundError:
+            self.fail(f'Error loading in datafiles')
+
+    def test_get_random_user_dataset(self):
+        dataset = get_dataset(['../data/dataset_2017.csv'])
+        self.assertIsNotNone(dataset.get_random_user())
 
     def test_user_has_similar(self):
         dataset = get_dataset(['../data/dataset_2017.csv'])
@@ -17,16 +27,6 @@ class TestCases(unittest.TestCase):
             if threshold >= 5:
                 self.fail(f'User {user} has no similar candidates!')
         self.assertGreaterEqual(len(similars), 1)
-
-    def test_no_crash_computations(self):
-        dataset = get_dataset(['../data/dataset_2017.csv'])
-        user, old_user = dataset.get_random_user()
-        similar = dataset.get_similar_candidates(user)
-        engine = Engine(user=user, candidates=similar)
-        try:
-            compute_predictions(user, engine)
-        except (IndexError, ValueError) as e:
-            self.fail(f"Function raised exception: {e.args}")
 
 
 if __name__ == '__main__':
