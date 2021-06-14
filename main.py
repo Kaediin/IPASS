@@ -1,8 +1,9 @@
+import copy as copy
+
+import matplotlib.pyplot as plot
+
 from models import *
 from utils import *
-import timeit
-import copy as copy
-import matplotlib.pyplot as plot
 
 
 def compute_predictions(user, engine):
@@ -153,6 +154,7 @@ def run_knn():
     prediction_knn = engine.predict_scores_knn(empty_traits)
     user = map_calculated_scores_to_user(prediction_knn, user)
 
+
 def run_mean():
     dataset = Dataset(['data/dataset_2017.csv'])
     all_candidates = dataset.load()
@@ -164,6 +166,7 @@ def run_mean():
     for trait in empty_traits:
         prediction_scores.append((trait, engine.calculate_mean_score(trait)))
     user = map_calculated_scores_to_user(prediction_scores, user)
+
 
 def run_UPCF():
     dataset = Dataset(['data/dataset_2017.csv'])
@@ -177,6 +180,7 @@ def run_UPCF():
         prediction_UPCF, confidence = engine.calculate_score_upcf(trait)
         prediction_scores.append((trait, prediction_UPCF))
     user = map_calculated_scores_to_user(prediction_scores, user)
+
 
 if __name__ == '__main__':
     # start = timeit.default_timer()
@@ -192,6 +196,6 @@ if __name__ == '__main__':
     # end = timeit.default_timer()
     # print(f'Time UPCF-algorithm: {end-start} seconds')
     dataset = get_dataset(['data/dataset_2017.csv'])
-    # plot_x_candidates(dataset)
+    plot_x_candidates(dataset)
     plot_x_traits(dataset)
     # plot_every_trait(dataset)

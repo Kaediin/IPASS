@@ -293,17 +293,34 @@ class Engine:
             distance += (float(self.user.scores.__dict__[trait]) - float(similar_candidate.scores.__dict__[trait])) ** 2
         return math.sqrt(distance)
 
-    def get_neighbours(self, traits, num_neighbors=-1):
+    def get_nearest_neighbours(self, traits, num_neighbors=-1):
+        """
+        Get nearest neighbours to the user
+        :param traits: The traits we want to look at to determine the distance
+        :param num_neighbors: the amount of neighbours we want to have
+        :return: all the distances sorted so we can return a certain amount of neighbours
+        """
         distances = [(candidate, self.calculate_euclidean_distance(traits, candidate)) for candidate in self.candidates]
         distances.sort(key=lambda row: row[1])
-        num_neighbors = len(distances) if num_neighbors == -1 else num_neighbors
+        num_neighbors = len(distances) if num_neighbors == -1 or num_neighbors > len(distances) else num_neighbors
         return [distances[i][0] for i in range(num_neighbors)]
 
     def predict_scores_knn(self, traits, num_neighbors=-1):
-        neighbors = self.get_neighbours(traits, num_neighbors=num_neighbors)
+        """
+        This function combines the other KNN-functions to compute an output
+        :param traits: the traits we want to predict scores for
+        :param num_neighbors: the amount of neighbours we want to use for computing
+        :return: the values. A tuple with the trait-name and score
+        """
+        # Get all the neighbours
+        neighbours = self.get_nearest_neighbours(traits, num_neighbors=num_neighbors)
         output_values = []
         for trait in traits:
-            values_trait = [nb.scores.__dict__[trait] for nb in neighbors]
+            # get the value from all the neighbours
+            values_trait = [nb.scores.__dict__[trait] for nb in neighbours]
+            # get the max value which is the most likely that the user will score
             prediction = max(set(values_trait), key=values_trait.count)
+            # append the prediction-value in a tuple with the trait-name to the output list
             output_values.append((trait, prediction))
+        # return the list with trait-names and corresponding scores
         return output_values
