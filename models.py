@@ -32,6 +32,7 @@ class Dataset:
         :param candidates: hold a list of all the candidates. These are computed by function: load
      """
     paths: list
+    traits_to_reset = set()
     candidates = []
 
     def load(self):
@@ -59,7 +60,7 @@ class Dataset:
         self.candidates = candidates_models
         return self.candidates
 
-    def get_random_user(self, empty_traits=True, limit=50):
+    def get_random_user(self, empty_traits=True, limit=int(len(TRAIT_KEYWORDS)/2)):
         """
         This function gets and returns a random (mutated) candidate from the list of all candidates
         :param empty_traits: a boolean that clears a set amount of traits (based on the limit value)
@@ -73,10 +74,12 @@ class Dataset:
         # create a deepcopy (for testing purposes we want to see the before and after -values)
         old_candidate = copy.deepcopy(candidate)
         if empty_traits:
-            # loop through the row and set the value to 0 if the limit is reached
-            for i, row in enumerate(candidate.scores.__dict__.items()):
-                if i >= limit:
-                    candidate.scores.__dict__[row[0]] = 0
+            # Create a set of unqiue trait-names
+            while len(self.traits_to_reset) < limit:
+                self.traits_to_reset.add(random.choice(TRAIT_KEYWORDS))
+            # loop through the row and set the value to 0
+            for trait in list(self.traits_to_reset)[:limit]:
+                candidate.scores.__dict__[trait] = 0
         # return the new (mutated) and old (original) candidate
         return candidate, old_candidate
 
@@ -92,23 +95,28 @@ class Dataset:
         traits = [k for k, v in user.scores.__dict__.items() if v != 0]
         similar_scoring_cadidates = []
         # Loop through every candidate
-        for candidate in self.candidates:
-            # set a default value
-            has_higher_threshold_value = False
-            # Loop through every trait
-            for trait in traits:
-                # If the candidate and the user both have a value for this trait we keep going
-                # else we continue to next iteration
-                if int(candidate.scores.__dict__[trait]) != 0 and int(user.scores.__dict__[trait]) != 0:
-                    # If the absolute value of the candidate score minus the user score is less than the threshold
-                    # (ie we are out of range) we change the value letting the outer-scope know and break
-                    if abs(int(candidate.scores.__dict__[trait]) - int(user.scores.__dict__[trait])) > threshold:
-                        has_higher_threshold_value = True
-                        break
-            # Depending on the value we append the candidate to the list
-            # (if the absolute value above was in range or not)
-            if not has_higher_threshold_value:
-                similar_scoring_cadidates.append(candidate)
+        while len(similar_scoring_cadidates) == 0:
+            for candidate in self.candidates:
+                # set a default value
+                has_higher_threshold_value = False
+                # Loop through every trait
+                for trait in traits:
+                    # If the candidate and the user both have a value for this trait we keep going
+                    # else we continue to next iteration
+                    if int(candidate.scores.__dict__[trait]) != 0 and int(user.scores.__dict__[trait]) != 0:
+                        # If the absolute value of the candidate score minus the user score is less than the threshold
+                        # (ie we are out of range) we change the value letting the outer-scope know and break
+                        if abs(int(candidate.scores.__dict__[trait]) - int(user.scores.__dict__[trait])) > threshold:
+                            has_higher_threshold_value = True
+                            break
+                # Depending on the value we append the candidate to the list
+                # (if the absolute value above was in range or not)
+                if not has_higher_threshold_value:
+                    similar_scoring_cadidates.append(candidate)
+            if len(similar_scoring_cadidates) == 0:
+                threshold += 1
+            else:
+                break
         return similar_scoring_cadidates
 
 
@@ -251,18 +259,19 @@ class Engine:
         # return the summed up values divided by the lengths. Also known as the mean-value
         return sum(scores) / float(len(scores))
 
-    def calculate_mode_score(self, trait_name):
+    def calculate_score_upcf(self, trait_name, return_full_score=False):
         """
-        This function will calculate the most-common-score (mean-score) of a trait from the list of (similar) candidates
+        This function will compute a score of a trait from the list of (similar) candidates with te UPCF algorithm
+        This algorithm is described in detail here: https://github.com/Kaediin/IPASS/issues/6
+        :param return_full_score: return the dict with all the scores and their counters
         :param trait_name: the trait-name we want to predict a score for
         :return: The calculated mean score
         """
-        # Count the amount of time each value has been scored. This result (dict) will look somethin like:
-        # {1: 265, 2: 187, 3: 80, 4: 9, 5: 1}
+
         sim_scores = Counter(candidate.scores.__dict__[trait_name] for candidate in self.candidates)
-        # Check if we have a value. If not we return a predefined value
+        if return_full_score:
+            return sim_scores
         if len(sim_scores.values()) == 0:
             # TODO: Find valid response!
             return random.randint(0, 5), 0
-        # return the most common score and the % of that score to the total amount od scores. This shows the confidence
         return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
