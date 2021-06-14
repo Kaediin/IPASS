@@ -7,7 +7,7 @@ import matplotlib.pyplot as plot
 
 def compute_predictions(user, engine):
     empty_traits = get_empty_traits(user)
-    user_mode = copy.deepcopy(user)
+    user_UPCF = copy.deepcopy(user)
     user_mean = copy.deepcopy(user)
     user_knn = copy.deepcopy(user)
 
@@ -16,12 +16,12 @@ def compute_predictions(user, engine):
         user_knn.scores.__dict__[row[0]] = row[1]
 
     for trait in empty_traits:
-        prediction_mode, confidence = engine.calculate_score_upcf(trait)
+        prediction_UPCF, confidence = engine.calculate_score_upcf(trait)
         prediction_mean = engine.calculate_mean_score(trait)
-        user_mode.scores.__dict__[trait] = prediction_mode
+        user_UPCF.scores.__dict__[trait] = prediction_UPCF
         user_mean.scores.__dict__[trait] = str(round(prediction_mean))
 
-    return user_mode, user_mean, user_knn
+    return user_UPCF, user_mean, user_knn
 
 
 def convert_scores_to_pecentage(scores):
@@ -51,20 +51,20 @@ def get_dataset(paths):
 
 
 def plot_x_candidates(dataset, x=101):
-    p_mode, p_mean, p_knn = [], [], []
+    p_UPCF, p_mean, p_knn = [], [], []
     for i in range(x):
         user, old_user = dataset.get_random_user()
         similars = dataset.get_similar_candidates(user)
         engine = Engine(user=user, candidates=similars)
 
-        user_mode, user_mean, user_knn = compute_predictions(user, engine)
-        p_mode.append(calculate_similarities(old_user.scores.__dict__.values(), user_mode.scores.__dict__.values()))
+        user_UPCF, user_mean, user_knn = compute_predictions(user, engine)
+        p_UPCF.append(calculate_similarities(old_user.scores.__dict__.values(), user_UPCF.scores.__dict__.values()))
         p_mean.append(calculate_similarities(old_user.scores.__dict__.values(), user_mean.scores.__dict__.values()))
         p_knn.append(calculate_similarities(old_user.scores.__dict__.values(), user_knn.scores.__dict__.values()))
 
     plot_data(
         'Prediction-accuracy of 50 traits over 100 candidates (2017 data)',
-        [p_mode, "Mode", f'Average mode: {round(calculate_average_accuracy(p_mode), 3)}%'],
+        [p_UPCF, "UPCF", f'Average UPCF: {round(calculate_average_accuracy(p_UPCF), 3)}%'],
         [p_mean, "Mean", f'Average mean: {round(calculate_average_accuracy(p_mean), 3)}%'],
         [p_knn, "KNN", f'Average knn: {round(calculate_average_accuracy(p_knn), 3)}%'],
         [i * 10 for i in range(11)],
@@ -75,20 +75,20 @@ def plot_x_candidates(dataset, x=101):
 
 
 def plot_x_traits(dataset):
-    p_mode, p_mean, p_knn = [], [], []
-    for i in range(len(TRAIT_KEYWORDS)):
+    p_UPCF, p_mean, p_knn = [], [], []
+    for i in range(21):
         user, old_user = dataset.get_random_user(limit=len(TRAIT_KEYWORDS) - i)
         similars = dataset.get_similar_candidates(user)
         engine = Engine(user=user, candidates=similars)
 
-        user_mode, user_mean, user_knn = compute_predictions(user, engine)
-        p_mode.append(calculate_similarities(old_user.scores.__dict__.values(), user_mode.scores.__dict__.values()))
+        user_UPCF, user_mean, user_knn = compute_predictions(user, engine)
+        p_UPCF.append(calculate_similarities(old_user.scores.__dict__.values(), user_UPCF.scores.__dict__.values()))
         p_mean.append(calculate_similarities(old_user.scores.__dict__.values(), user_mean.scores.__dict__.values()))
         p_knn.append(calculate_similarities(old_user.scores.__dict__.values(), user_knn.scores.__dict__.values()))
 
     plot_data(
         'Prediction-accuracy over x amount of undetermined traits (2017 data)',
-        [p_mode, "Mode", f'Average mode: {round(calculate_average_accuracy(p_mode), 3)}%'],
+        [p_UPCF, "UPCF", f'Average UPCF: {round(calculate_average_accuracy(p_UPCF), 3)}%'],
         [p_mean, "Mean", f'Average mean: {round(calculate_average_accuracy(p_mean), 3)}%'],
         [p_knn, "KNN", f'Average knn: {round(calculate_average_accuracy(p_knn), 3)}%'],
         [i * 10 for i in range(11)],
@@ -120,14 +120,14 @@ def plot_every_trait(dataset, iterations=101):
         plot.show()
 
 
-def plot_data(title, mode_data, mean_data, knn_data, yticks, ylabel, xlabel, savefig):
-    plot.plot(mode_data[0], label=mode_data[1], color='purple')
+def plot_data(title, UPCF_data, mean_data, knn_data, yticks, ylabel, xlabel, savefig):
+    plot.plot(UPCF_data[0], label=UPCF_data[1], color='purple')
     plot.plot(mean_data[0], label=mean_data[1], color='blue')
     plot.plot(knn_data[0], label=knn_data[1], color='orange')
     plot.title(title)
-    plot.text(0, 30, knn_data[2], color='orange')
-    plot.text(0, 25, mode_data[2], color='purple')
-    plot.text(0, 20, mean_data[2], color='blue')
+    plot.text(0, 20, knn_data[2], color='orange')
+    plot.text(0, 25, UPCF_data[2], color='purple')
+    plot.text(0, 30, mean_data[2], color='blue')
     plot.yticks(yticks)
     plot.ylabel(ylabel)
     plot.xlabel(xlabel)
@@ -144,50 +144,54 @@ def map_calculated_scores_to_user(predictions, user):
 
 
 def run_knn():
-    dataset = get_dataset(['data/dataset_2017.csv'])
+    dataset = Dataset(['data/dataset_2017.csv'])
+    all_candidates = dataset.load()
     user, old_user = dataset.get_random_user()
-    similars = dataset.get_similar_candidates(user)
+    # similars = dataset.get_similar_candidates(user)
     empty_traits = get_empty_traits(user)
-    engine = Engine(user=user, candidates=similars)
+    engine = Engine(user=user, candidates=all_candidates)
     prediction_knn = engine.predict_scores_knn(empty_traits)
     user = map_calculated_scores_to_user(prediction_knn, user)
 
 def run_mean():
-    dataset = get_dataset(['data/dataset_2017.csv'])
+    dataset = Dataset(['data/dataset_2017.csv'])
+    all_candidates = dataset.load()
     user, old_user = dataset.get_random_user()
-    similars = dataset.get_similar_candidates(user)
+    # similars = dataset.get_similar_candidates(user)
     empty_traits = get_empty_traits(user)
-    engine = Engine(user=user, candidates=similars)
+    engine = Engine(user=user, candidates=all_candidates)
     prediction_scores = []
     for trait in empty_traits:
         prediction_scores.append((trait, engine.calculate_mean_score(trait)))
     user = map_calculated_scores_to_user(prediction_scores, user)
 
-def run_mode():
-    dataset = get_dataset(['data/dataset_2017.csv'])
+def run_UPCF():
+    dataset = Dataset(['data/dataset_2017.csv'])
+    all_candidates = dataset.load()
     user, old_user = dataset.get_random_user()
-    similars = dataset.get_similar_candidates(user)
+    # similars = dataset.get_similar_candidates(user)
     empty_traits = get_empty_traits(user)
-    engine = Engine(user=user, candidates=similars)
+    engine = Engine(user=user, candidates=all_candidates)
     prediction_scores = []
     for trait in empty_traits:
-        prediction_mode, confidence = engine.calculate_score_upcf(trait)
-        prediction_scores.append((trait, prediction_mode))
+        prediction_UPCF, confidence = engine.calculate_score_upcf(trait)
+        prediction_scores.append((trait, prediction_UPCF))
     user = map_calculated_scores_to_user(prediction_scores, user)
 
 if __name__ == '__main__':
-    start = timeit.default_timer()
-    run_knn()
-    end = timeit.default_timer()
-    print(f'Time KNN-algorithm: {end-start} seconds')
-    start = timeit.default_timer()
-    run_mean()
-    end = timeit.default_timer()
-    print(f'Time Mean-algorithm: {end-start} seconds')
-    start = timeit.default_timer()
-    run_mode()
-    end = timeit.default_timer()
-    print(f'Time Mode-algorithm: {end-start} seconds')
+    # start = timeit.default_timer()
+    # run_knn()
+    # end = timeit.default_timer()
+    # print(f'Time KNN-algorithm: {end-start} seconds')
+    # start = timeit.default_timer()
+    # run_mean()
+    # end = timeit.default_timer()
+    # print(f'Time Mean-algorithm: {end-start} seconds')
+    # start = timeit.default_timer()
+    # run_UPCF()
+    # end = timeit.default_timer()
+    # print(f'Time UPCF-algorithm: {end-start} seconds')
+    dataset = get_dataset(['data/dataset_2017.csv'])
     # plot_x_candidates(dataset)
-    # plot_x_traits(dataset)
+    plot_x_traits(dataset)
     # plot_every_trait(dataset)

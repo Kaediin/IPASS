@@ -279,24 +279,28 @@ class Engine:
 
     def calculate_euclidean_distance(self, traits, similar_candidate):
         """
-        Calculate the Euclidean distance between two vectors (candidates)
+        Calculate the Euclidean distance between two vectors (candidates). We do this by:
+            1. Subtracting both trait values
+            2. Squaring this result
+            3. Appending the squared resul to the distance value
+            4. Return the square-root of the total distances
         :param traits: the list of traits we want to calculate the distance of
         :param similar_candidate: a candidate similar to the user
-        :return: a rooted value of the distance
+        :return: the square-root value of the distance
         """
         distance = 0.0
         for trait in traits:
             distance += (float(self.user.scores.__dict__[trait]) - float(similar_candidate.scores.__dict__[trait])) ** 2
         return math.sqrt(distance)
 
-    def get_neighbors(self, traits, num_neighbors=-1):
+    def get_neighbours(self, traits, num_neighbors=-1):
         distances = [(candidate, self.calculate_euclidean_distance(traits, candidate)) for candidate in self.candidates]
         distances.sort(key=lambda row: row[1])
         num_neighbors = len(distances) if num_neighbors == -1 else num_neighbors
         return [distances[i][0] for i in range(num_neighbors)]
 
     def predict_scores_knn(self, traits, num_neighbors=-1):
-        neighbors = self.get_neighbors(traits, num_neighbors=num_neighbors)
+        neighbors = self.get_neighbours(traits, num_neighbors=num_neighbors)
         output_values = []
         for trait in traits:
             values_trait = [nb.scores.__dict__[trait] for nb in neighbors]
