@@ -1,6 +1,7 @@
 import csv
 import random
 import copy
+import math
 from collections import Counter
 from dataclasses import dataclass
 
@@ -60,7 +61,7 @@ class Dataset:
         self.candidates = candidates_models
         return self.candidates
 
-    def get_random_user(self, empty_traits=True, limit=int(len(TRAIT_KEYWORDS)/2)):
+    def get_random_user(self, empty_traits=True, limit=int(len(TRAIT_KEYWORDS) / 2)):
         """
         This function gets and returns a random (mutated) candidate from the list of all candidates
         :param empty_traits: a boolean that clears a set amount of traits (based on the limit value)
@@ -275,3 +276,30 @@ class Engine:
             # TODO: Find valid response!
             return random.randint(0, 5), 0
         return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
+
+    def calculate_euclidean_distance(self, traits, similar_candidate):
+        """
+        Calculate the Euclidean distance between two vectors (candidates)
+        :param traits: the list of traits we want to calculate the distance of
+        :param similar_candidate: a candidate similar to the user
+        :return: a rooted value of the distance
+        """
+        distance = 0.0
+        for trait in traits:
+            distance += (float(self.user.scores.__dict__[trait]) - float(similar_candidate.scores.__dict__[trait])) ** 2
+        return math.sqrt(distance)
+
+    def get_neighbors(self, traits, num_neighbors=-1):
+        distances = [(candidate, self.calculate_euclidean_distance(traits, candidate)) for candidate in self.candidates]
+        distances.sort(key=lambda row: row[1])
+        num_neighbors = len(distances) if num_neighbors == -1 else num_neighbors
+        return [distances[i][0] for i in range(num_neighbors)]
+
+    def predict_scores_knn(self, traits, num_neighbors=-1):
+        neighbors = self.get_neighbors(traits, num_neighbors=num_neighbors)
+        output_values = []
+        for trait in traits:
+            values_trait = [nb.scores.__dict__[trait] for nb in neighbors]
+            prediction = max(set(values_trait), key=values_trait.count)
+            output_values.append((trait, prediction))
+        return output_values
