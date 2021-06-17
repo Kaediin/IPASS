@@ -305,9 +305,10 @@ class Engine:
         num_neighbors = len(distances) if num_neighbors == -1 or num_neighbors > len(distances) else num_neighbors
         return [distances[i][0] for i in range(num_neighbors)]
 
-    def predict_scores_knn(self, traits, num_neighbors=-1):
+    def predict_scores_knn(self, traits, num_neighbors=-1, return_all_scores=False):
         """
         This function combines the other KNN-functions to compute an output
+        :param return_all_scores: deteremines if the algorithm wants all the scores back
         :param traits: the traits we want to predict scores for
         :param num_neighbors: the amount of neighbours we want to use for computing
         :return: the values. A tuple with the trait-name and score
@@ -318,9 +319,13 @@ class Engine:
         for trait in traits:
             # get the value from all the neighbours
             values_trait = [nb.scores.__dict__[trait] for nb in neighbours]
+            vals = values_trait.copy()
             # get the max value which is the most likely that the user will score
             prediction = max(set(values_trait), key=values_trait.count)
-            # append the prediction-value in a tuple with the trait-name to the output list
-            output_values.append((trait, prediction))
+            # append the prediction-value in a tuple with the trait-name to the output list and all the scores if stated
+            if return_all_scores:
+                output_values.append((trait, prediction, list(vals)))
+            else:
+                output_values.append((trait, prediction))
         # return the list with trait-names and corresponding scores
         return output_values
