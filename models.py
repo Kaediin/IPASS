@@ -6,20 +6,20 @@ from collections import Counter
 from dataclasses import dataclass
 
 # A list with static trait-keywords. All the rows in the datasets have scores corresponding to these keys
-TRAIT_KEYWORDS = ['Aanzien', 'Beheerst', 'Behoudend', 'Belangstellend', 'Bemiddelaar', 'Bestuurder', 'Betrokken',
-                  'Carriere', 'Commerciele_instelling', 'Communiceren', 'Competitie', 'Constructief', 'Contactgericht',
-                  'Controleur', 'Coordinator', 'Doelgericht', 'Doortastend', 'Energiek', 'Evenwichtig', 'Expertise',
-                  'Extravert', 'Flexibiliteit', 'Gedreven', 'Gefocust', 'Geinteresseerd', 'Georganiseerd',
-                  'Gestructureerd', 'Helpen', 'Initiatief', 'Inlevingsvermogen', 'Innovatief', 'Innovator',
-                  'Inspirerend', 'Invloed', 'Klantgerichte_instelling', 'Klantgerichtheid', 'Koersvast', 'Leergierig',
-                  'Leiderschap', 'Leren', 'Materiele_beloning', 'Mentor', 'Moedig', 'Omgevingsbewustzijn',
-                  'Ontwikkelen_van_anderen', 'Organisatiecommitment', 'Overtuigend', 'Overtuigingskracht', 'Perfectie',
-                  'Plannen_en_organiseren', 'Prestatiemotivatie', 'Proactieve_instelling', 'Probleemorientatie',
-                  'Probleemverkenning', 'Producent', 'Relatiebeheer', 'Relatiegericht', 'Resultaatgerichtheid',
-                  'Ruimdenkend', 'Samenwerken', 'Sensatie', 'Sociaal_handig', 'Sociale_wenselijkheid', 'Stabiel',
-                  'Stimulator', 'Sympathiek', 'Tactvol', 'Toegewijd', 'Tolerant', 'Verbindend', 'Vindingrijk',
-                  'Vriendelijk', 'Waardering', 'Wilskrachtig', 'Zelfbeheersing', 'Zelfvertrouwen', 'Zelfverzekerd',
-                  'Zingeving', 'Zorgvuldig']
+# TRAIT_KEYWORDS = ['Aanzien', 'Beheerst', 'Behoudend', 'Belangstellend', 'Bemiddelaar', 'Bestuurder', 'Betrokken',
+#                   'Carriere', 'Commerciele_instelling', 'Communiceren', 'Competitie', 'Constructief', 'Contactgericht',
+#                   'Controleur', 'Coordinator', 'Doelgericht', 'Doortastend', 'Energiek', 'Evenwichtig', 'Expertise',
+#                   'Extravert', 'Flexibiliteit', 'Gedreven', 'Gefocust', 'Geinteresseerd', 'Georganiseerd',
+#                   'Gestructureerd', 'Helpen', 'Initiatief', 'Inlevingsvermogen', 'Innovatief', 'Innovator',
+#                   'Inspirerend', 'Invloed', 'Klantgerichte_instelling', 'Klantgerichtheid', 'Koersvast', 'Leergierig',
+#                   'Leiderschap', 'Leren', 'Materiele_beloning', 'Mentor', 'Moedig', 'Omgevingsbewustzijn',
+#                   'Ontwikkelen_van_anderen', 'Organisatiecommitment', 'Overtuigend', 'Overtuigingskracht', 'Perfectie',
+#                   'Plannen_en_organiseren', 'Prestatiemotivatie', 'Proactieve_instelling', 'Probleemorientatie',
+#                   'Probleemverkenning', 'Producent', 'Relatiebeheer', 'Relatiegericht', 'Resultaatgerichtheid',
+#                   'Ruimdenkend', 'Samenwerken', 'Sensatie', 'Sociaal_handig', 'Sociale_wenselijkheid', 'Stabiel',
+#                   'Stimulator', 'Sympathiek', 'Tactvol', 'Toegewijd', 'Tolerant', 'Verbindend', 'Vindingrijk',
+#                   'Vriendelijk', 'Waardering', 'Wilskrachtig', 'Zelfbeheersing', 'Zelfvertrouwen', 'Zelfverzekerd',
+#                   'Zingeving', 'Zorgvuldig']
 
 
 @dataclass(frozen=False)
@@ -35,6 +35,7 @@ class Dataset:
     paths: list
     traits_to_reset = set()
     candidates = []
+    trait_keywords = []
 
     def load(self):
         """
@@ -54,14 +55,16 @@ class Dataset:
                 #     - The rest of the columns are the traits
                 # Add these candidates to a list ( we use a list-comprehension as these have faster runtimes)
                 # We also skip the first iteration as this row ony has the headers of the columns
-                candidates_models += [Candidate(row[0], row[1], TraitScores(*row[2:])) for i, row in enumerate(reader)
-                                      if
-                                      i != 0]
+                for i, row in enumerate(reader):
+                    if i == 0:
+                        self.trait_keywords = row[2:]
+                    else:
+                        candidates_models.append(Candidate(row[0], row[1], TraitScores(*row[2:])))
         # Assign the list of candidates to the class attribute and return said attribute
         self.candidates = candidates_models
         return self.candidates
 
-    def get_random_user(self, empty_traits=True, limit=int(len(TRAIT_KEYWORDS) / 2)):
+    def get_random_user(self, empty_traits=True, limit=int(len(trait_keywords) / 2)):
         """
         This function gets and returns a random (mutated) candidate from the list of all candidates
         :param empty_traits: a boolean that clears a set amount of traits (based on the limit value)
@@ -77,7 +80,7 @@ class Dataset:
         if empty_traits:
             # Create a set of unqiue trait-names
             while len(self.traits_to_reset) < limit:
-                self.traits_to_reset.add(random.choice(TRAIT_KEYWORDS))
+                self.traits_to_reset.add(random.choice(self.trait_keywords))
             # loop through the row and set the value to 0
             for trait in list(self.traits_to_reset)[:limit]:
                 candidate.scores.__dict__[trait] = 0
