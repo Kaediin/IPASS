@@ -15,8 +15,8 @@ def compute_predictions(user, engine):
     for trait in empty_traits:
         prediction_UPCF, confidence = engine.calculate_score_upcf(trait)
         prediction_mean = engine.calculate_mean_score(trait)
-        user_UPCF.scores.__dict__[trait] = prediction_UPCF
-        user_mean.scores.__dict__[trait] = str(round(prediction_mean))
+        user_UPCF.scores[trait] = prediction_UPCF
+        user_mean.scores[trait] = str(round(prediction_mean))
 
     return user_UPCF, user_mean, user_knn
 
@@ -34,9 +34,9 @@ def compute_scores_all_algorithms(data, interations, incremented_trait_limit=Fal
         engine = Engine(user=user, candidates=similar_candidates)
 
         user_UPCF, user_mean, user_knn = compute_predictions(user, engine)
-        p_UPCF.append(calculate_similarities(old_user.scores.__dict__.values(), user_UPCF.scores.__dict__.values()))
-        p_mean.append(calculate_similarities(old_user.scores.__dict__.values(), user_mean.scores.__dict__.values()))
-        p_knn.append(calculate_similarities(old_user.scores.__dict__.values(), user_knn.scores.__dict__.values()))
+        p_UPCF.append(calculate_similarities(old_user.scores.values(), user_UPCF.scores.values()))
+        p_mean.append(calculate_similarities(old_user.scores.values(), user_mean.scores.values()))
+        p_knn.append(calculate_similarities(old_user.scores.values(), user_knn.scores.values()))
     return p_UPCF, p_mean, p_knn
 
 
@@ -75,7 +75,7 @@ def plot_engine_x_candidates(data, x=101):
 #         p_scores = {'1': [], '2': [], '3': [], '4': []}
 #         for i in range(iterations):
 #             user, old_user = data.get_random_user()
-#             user.scores.__dict__[trait] = 0
+#             user.scores[trait] = 0
 #             similar_candidates = data.get_similar_candidates(user)
 #             engine = Engine(user=user, candidates=similar_candidates)
 #             scores = engine.calculate_score_upcf(trait, return_full_score=True)
@@ -114,6 +114,8 @@ if __name__ == '__main__':
     accuracies = {}
     for trait in dataset.trait_keywords:
         print(trait)
-        accuracies[trait] = generate_trait_accuracy([(trait, user.scores.__dict__[trait])], user, dataset)
+        accuracies[trait] = generate_trait_accuracy([(trait, user.scores[trait])], user, dataset)
+        print(accuracies)
+        break
     with open('results.json', 'w') as f:
         json.dump(accuracies, f)

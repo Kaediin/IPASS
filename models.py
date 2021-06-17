@@ -1,25 +1,12 @@
-import csv
-import random
 import copy
+import csv
 import math
+import random
 from collections import Counter
 from dataclasses import dataclass
 
+
 # A list with static trait-keywords. All the rows in the datasets have scores corresponding to these keys
-# TRAIT_KEYWORDS = ['Aanzien', 'Beheerst', 'Behoudend', 'Belangstellend', 'Bemiddelaar', 'Bestuurder', 'Betrokken',
-#                   'Carriere', 'Commerciele_instelling', 'Communiceren', 'Competitie', 'Constructief', 'Contactgericht',
-#                   'Controleur', 'Coordinator', 'Doelgericht', 'Doortastend', 'Energiek', 'Evenwichtig', 'Expertise',
-#                   'Extravert', 'Flexibiliteit', 'Gedreven', 'Gefocust', 'Geinteresseerd', 'Georganiseerd',
-#                   'Gestructureerd', 'Helpen', 'Initiatief', 'Inlevingsvermogen', 'Innovatief', 'Innovator',
-#                   'Inspirerend', 'Invloed', 'Klantgerichte_instelling', 'Klantgerichtheid', 'Koersvast', 'Leergierig',
-#                   'Leiderschap', 'Leren', 'Materiele_beloning', 'Mentor', 'Moedig', 'Omgevingsbewustzijn',
-#                   'Ontwikkelen_van_anderen', 'Organisatiecommitment', 'Overtuigend', 'Overtuigingskracht', 'Perfectie',
-#                   'Plannen_en_organiseren', 'Prestatiemotivatie', 'Proactieve_instelling', 'Probleemorientatie',
-#                   'Probleemverkenning', 'Producent', 'Relatiebeheer', 'Relatiegericht', 'Resultaatgerichtheid',
-#                   'Ruimdenkend', 'Samenwerken', 'Sensatie', 'Sociaal_handig', 'Sociale_wenselijkheid', 'Stabiel',
-#                   'Stimulator', 'Sympathiek', 'Tactvol', 'Toegewijd', 'Tolerant', 'Verbindend', 'Vindingrijk',
-#                   'Vriendelijk', 'Waardering', 'Wilskrachtig', 'Zelfbeheersing', 'Zelfvertrouwen', 'Zelfverzekerd',
-#                   'Zingeving', 'Zorgvuldig']
 
 
 @dataclass(frozen=False)
@@ -43,6 +30,7 @@ class Dataset:
         :return: all of the Candidate-objects from the loaded dataset(s)
         """
         candidates_models = []
+        self.trait_keywords = []
         # Loop through every file-path
         for file in self.paths:
             # open the file as f
@@ -59,10 +47,16 @@ class Dataset:
                     if i == 0:
                         self.trait_keywords = row[2:]
                     else:
-                        candidates_models.append(Candidate(row[0], row[1], TraitScores(*row[2:])))
+                        candidates_models.append(Candidate(row[0], row[1], self.match_score_traits(row[2:])))
         # Assign the list of candidates to the class attribute and return said attribute
         self.candidates = candidates_models
         return self.candidates
+
+    def match_score_traits(self, user_scores):
+        scores = {}
+        for i, score in enumerate(user_scores):
+            scores[self.trait_keywords[i]] = score
+        return scores
 
     def get_random_user(self, empty_traits=True, limit=int(len(trait_keywords) / 2)):
         """
@@ -96,7 +90,7 @@ class Dataset:
         :return: a list of similar scoring candidates
         """
         # Create a list of traits where the corresponding value is not 0
-        traits = [k for k, v in user.scores.__dict__.items() if v != 0]
+        traits = [k for k, v in user.scores.items() if v != 0]
         similar_scoring_cadidates = []
         # Loop through every candidate
         while len(similar_scoring_cadidates) == 0:
@@ -107,10 +101,10 @@ class Dataset:
                 for trait in traits:
                     # If the candidate and the user both have a value for this trait we keep going
                     # else we continue to next iteration
-                    if int(candidate.scores.__dict__[trait]) != 0 and int(user.scores.__dict__[trait]) != 0:
+                    if int(candidate.scores[trait]) != 0 and int(user.scores[trait]) != 0:
                         # If the absolute value of the candidate score minus the user score is less than the threshold
                         # (ie we are out of range) we change the value letting the outer-scope know and break
-                        if abs(int(candidate.scores.__dict__[trait]) - int(user.scores.__dict__[trait])) > threshold:
+                        if abs(int(candidate.scores[trait]) - int(user.scores[trait])) > threshold:
                             has_higher_threshold_value = True
                             break
                 # Depending on the value we append the candidate to the list
@@ -122,92 +116,6 @@ class Dataset:
             else:
                 break
         return similar_scoring_cadidates
-
-
-@dataclass(frozen=False)
-class TraitScores:
-    """
-    An object-class which houses all the traits from a row of the dataset
-    """
-    Aanzien: int
-    Beheerst: int
-    Behoudend: int
-    Belangstellend: int
-    Bemiddelaar: int
-    Bestuurder: int
-    Betrokken: int
-    Carriere: int
-    Commerciele_instelling: int
-    Communiceren: int
-    Competitie: int
-    Constructief: int
-    Contactgericht: int
-    Controleur: int
-    Coordinator: int
-    Doelgericht: int
-    Doortastend: int
-    Energiek: int
-    Evenwichtig: int
-    Expertise: int
-    Extravert: int
-    Flexibiliteit: int
-    Gedreven: int
-    Gefocust: int
-    Geinteresseerd: int
-    Georganiseerd: int
-    Gestructureerd: int
-    Helpen: int
-    Initiatief: int
-    Inlevingsvermogen: int
-    Innovatief: int
-    Innovator: int
-    Inspirerend: int
-    Invloed: int
-    Klantgerichte_instelling: int
-    Klantgerichtheid: int
-    Koersvast: int
-    Leergierig: int
-    Leiderschap: int
-    Leren: int
-    Materiele_beloning: int
-    Mentor: int
-    Moedig: int
-    Omgevingsbewustzijn: int
-    Ontwikkelen_van_anderen: int
-    Organisatiecommitment: int
-    Overtuigend: int
-    Overtuigingskracht: int
-    Perfectie: int
-    Plannen_en_organiseren: int
-    Prestatiemotivatie: int
-    Proactieve_instelling: int
-    Probleemorientatie: int
-    Probleemverkenning: int
-    Producent: int
-    Relatiebeheer: int
-    Relatiegericht: int
-    Resultaatgerichtheid: int
-    Ruimdenkend: int
-    Samenwerken: int
-    Sensatie: int
-    Sociaal_handig: int
-    Sociale_wenselijkheid: int
-    Stabiel: int
-    Stimulator: int
-    Sympathiek: int
-    Tactvol: int
-    Toegewijd: int
-    Tolerant: int
-    Verbindend: int
-    Vindingrijk: int
-    Vriendelijk: int
-    Waardering: int
-    Wilskrachtig: int
-    Zelfbeheersing: int
-    Zelfvertrouwen: int
-    Zelfverzekerd: int
-    Zingeving: int
-    Zorgvuldig: int
 
 
 @dataclass(frozen=True)
@@ -223,7 +131,7 @@ class Candidate:
     """
     id: int
     research_id: str
-    scores: TraitScores
+    scores: {}
 
 
 @dataclass(frozen=False)
@@ -293,7 +201,7 @@ class Engine:
         """
         distance = 0.0
         for trait in traits:
-            distance += (float(self.user.scores.__dict__[trait]) - float(similar_candidate.scores.__dict__[trait])) ** 2
+            distance += (float(self.user.scores[trait]) - float(similar_candidate.scores[trait])) ** 2
         return math.sqrt(distance)
 
     def get_nearest_neighbours(self, traits, num_neighbors=-1):
@@ -321,7 +229,7 @@ class Engine:
         output_values = []
         for trait in traits:
             # get the value from all the neighbours
-            values_trait = [nb.scores.__dict__[trait] for nb in neighbours]
+            values_trait = [nb.scores[trait] for nb in neighbours]
             vals = values_trait.copy()
             # get the max value which is the most likely that the user will score
             prediction = max(set(values_trait), key=values_trait.count)
