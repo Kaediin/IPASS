@@ -1,7 +1,7 @@
-import copy
-import csv
-import math
-import random
+from copy import deepcopy
+from csv import reader as csv_reader
+from math import sqrt
+from random import choice, randint
 from collections import Counter
 from dataclasses import dataclass
 
@@ -36,7 +36,7 @@ class Dataset:
             # open the file as f
             with open(file, newline='') as f:
                 # create a reader (by reader the file)
-                reader = csv.reader(f, delimiter=';')
+                reader = csv_reader(f, delimiter=';')
                 # Create a candidate object:
                 #     - First column is the candidates id
                 #     - Second column is the candidas research_id
@@ -66,18 +66,18 @@ class Dataset:
         :return: the candidate with mutated trait-values if stated by the parameters
         """
         # Choose a random candidate from the list of candidates
-        candidate = random.choice(self.candidates)
+        candidate = choice(self.candidates)
         # remove this candidate from the list so it doesnt get compared to itself lateron
         self.candidates.remove(candidate)
         # create a deepcopy (for testing purposes we want to see the before and after -values)
-        old_candidate = copy.deepcopy(candidate)
+        old_candidate = deepcopy(candidate)
         if empty_traits:
             # Create a set of unqiue trait-names
             while len(self.traits_to_reset) < limit:
-                self.traits_to_reset.add(random.choice(self.trait_keywords))
+                self.traits_to_reset.add(choice(self.trait_keywords))
             # loop through the row and set the value to 0
             for trait in list(self.traits_to_reset)[:limit]:
-                candidate.scores.__dict__[trait] = 0
+                candidate.scores[trait] = 0
         # return the new (mutated) and old (original) candidate
         return candidate, old_candidate
 
@@ -153,7 +153,7 @@ class Engine:
         """
         # Check for every item in the dict is the value is not 0. Then we append the key. Else nothing
         # We do this in a list-comprehension as the runtimes are faster
-        return [k for k, v in self.user.scores.__dict__.items() if v != 0]
+        return [k for k, v in self.user.scores.items() if v != 0]
 
     def calculate_mean_score(self, trait_name):
         """
@@ -162,12 +162,12 @@ class Engine:
         :return: the mean score of the trait
         """
         # Get all the scores of the trait given from all the candidates
-        scores = [int(candidate.scores.__dict__[trait_name]) for candidate in self.candidates]
+        scores = [int(candidate.scores[trait_name]) for candidate in self.candidates]
         # If we dont have a single score (ie: we dont have (similar) candidates with a traitscore)
         # We return a predefined value
         if len(scores) == 0:
             # TODO: Find valid response!
-            return random.randint(0, 5)
+            return randint(0, 5)
         # return the summed up values divided by the lengths. Also known as the mean-value
         return sum(scores) / float(len(scores))
 
@@ -180,12 +180,12 @@ class Engine:
         :return: The calculated mean score
         """
 
-        sim_scores = Counter(candidate.scores.__dict__[trait_name] for candidate in self.candidates)
+        sim_scores = Counter(candidate.scores[trait_name] for candidate in self.candidates)
         if return_full_score:
             return sim_scores
         if len(sim_scores.values()) == 0:
             # TODO: Find valid response!
-            return random.randint(0, 5), 0
+            return randint(0, 5), 0
         return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
 
     def calculate_euclidean_distance(self, traits, similar_candidate):
@@ -202,7 +202,7 @@ class Engine:
         distance = 0.0
         for trait in traits:
             distance += (float(self.user.scores[trait]) - float(similar_candidate.scores[trait])) ** 2
-        return math.sqrt(distance)
+        return sqrt(distance)
 
     def get_nearest_neighbours(self, traits, num_neighbors=-1):
         """

@@ -7,10 +7,10 @@ from utils import *
 
 def compute_predictions(user, engine):
     empty_traits = get_empty_traits(user)
-    user_UPCF = copy.deepcopy(user)
-    user_mean = copy.deepcopy(user)
+    user_UPCF = deepcopy(user)
+    user_mean = deepcopy(user)
 
-    user_knn = map_calculated_scores_to_user(engine.predict_scores_knn(empty_traits), copy.deepcopy(user))
+    user_knn = map_calculated_scores_to_user(engine.predict_scores_knn(empty_traits), deepcopy(user))
 
     for trait in empty_traits:
         prediction_UPCF, confidence = engine.calculate_score_upcf(trait)

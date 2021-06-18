@@ -113,11 +113,12 @@ def generate_trait_accuracy(trait_data, user, dataset):
         percentages_values = percentages_dict.values()
         scores_values = [int(row[1]) for row in scores_data]
         # create a new dict with the amount of trait we check each time
+        print(occurrences)
         output['matches'][i + 1] = {}
         output['matches'][i + 1]['results'] = []
         output['matches'][i + 1]['range'] = (
             occurrences[occurrences.most_common()[-1][0]], occurrences[occurrences.most_common()[0]])
-        output['matches'][i + 1]['confidence'] = percentages_dict[str(scores_values[-1])]
+        output['matches'][i + 1]['confidence'] = percentages_dict[str(scores_values[i])]
         output['matches'][i + 1]['results'] = [(data[0], int(data[1])) for data in scores_data]
         user.scores[leftover_traits[i]] = original_scores[leftover_traits[i]]
     # return the output
