@@ -1,6 +1,7 @@
 import unittest
 
-from main import get_dataset, compute_predictions
+from main import get_dataset
+from plots import compute_predictions
 from models import *
 
 
@@ -40,21 +41,21 @@ class TestCases(unittest.TestCase):
         engine, user = get_random_user_engine()
         # get results for each algorithms and check to see if the results are valid
         p_UPCF, p_mean, p_knn = compute_predictions(user, engine)
-        self.assertTrue(user_has_no_missing_scores(p_knn.scores.__dict__))
+        self.assertTrue(user_has_no_missing_scores(p_knn.scores))
 
     def test_mean_has_results(self):
         # get a random user and engine setup
         engine, user = get_random_user_engine()
         # get results for each algorithms and check to see if the results are valid
         p_UPCF, p_mean, p_knn = compute_predictions(user, engine)
-        self.assertTrue(user_has_no_missing_scores(p_mean.scores.__dict__))
+        self.assertTrue(user_has_no_missing_scores(p_mean.scores))
 
     def test_UPCF_has_results(self):
         # get a random user and engine setup
         engine, user = get_random_user_engine()
         # get results for each algorithms and check to see if the results are valid
         p_UPCF, p_mean, p_knn = compute_predictions(user, engine)
-        self.assertTrue(user_has_no_missing_scores(p_UPCF.scores.__dict__))
+        self.assertTrue(user_has_no_missing_scores(p_UPCF.scores))
 
 
 if __name__ == '__main__':
