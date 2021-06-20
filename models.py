@@ -160,11 +160,6 @@ class Engine:
         """
         # Get all the scores of the trait given from all the candidates
         scores = [int(candidate.scores[trait_name]) for candidate in self.candidates]
-        # If we dont have a single score (ie: we dont have (similar) candidates with a traitscore)
-        # We return a predefined value
-        if len(scores) == 0:
-            # TODO: Find valid response!
-            return randint(0, 5)
         # return the summed up values divided by the lengths. Also known as the mean-value
         return sum(scores) / float(len(scores))
 
@@ -180,9 +175,6 @@ class Engine:
         sim_scores = Counter(candidate.scores[trait_name] for candidate in self.candidates)
         if return_full_score:
             return sim_scores
-        if len(sim_scores.values()) == 0:
-            # TODO: Find valid response!
-            return randint(0, 5), 0
         return sim_scores.most_common(1)[0][0], (100 * sim_scores.most_common(1)[0][1] / sum(sim_scores.values()))
 
     def calculate_euclidean_distance(self, traits, similar_candidate):
