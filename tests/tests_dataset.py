@@ -1,5 +1,4 @@
-import glob
-import unittest
+import glob, unittest
 
 from main import get_dataset
 
