@@ -1,7 +1,7 @@
 from copy import deepcopy
 from csv import reader as csv_reader
 from math import sqrt
-from random import choice, randint
+from random import choice, choices, randint, shuffle
 from collections import Counter
 from dataclasses import dataclass
 
@@ -118,7 +118,7 @@ class Dataset:
         return similar_scoring_cadidates
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class Candidate:
     """
     the candidate model used to convert a row of the dataset to an object
