@@ -94,32 +94,58 @@ def generate_trait_accuracy(trait_data, user, dataset):
     for data_per_trait in trait_data:
         trait_names.append(data_per_trait[0])
         trait_scores.append(data_per_trait[1])
+    # Create the dict
+    output = {'matches': {}}
     # Calculate the trait we still need to compute
     leftover_traits = dataset.trait_keywords.copy()
     [leftover_traits.remove(name) for name in trait_names]
-    # Create the dict
-    output = {'matches': {}}
+
     # loop through all the leftover traits needed to score len(traits) - 1
     for i in range(len(leftover_traits)):
-        # get 1 more each iteration
-        random_traits = leftover_traits[:i + 1]
         # get the scores for every trait
+        user.scores = load_x_scores(original_scores, user.scores, leftover_traits, i)
         sim_candidates = dataset.get_similar_candidates(user)
         engine = Engine(user=user, candidates=sim_candidates)
-        scores_data = engine.predict_scores_knn(random_traits, return_all_scores=True)
-        # count the occurrences of each score and their percentages
-        occurrences = Counter(scores_data[i][2])
-        percentages_dict = convert_scores_to_pecentage(occurrences)
-        percentages_values = percentages_dict.values()
-        scores_values = [int(row[1]) for row in scores_data]
-        # create a new dict with the amount of trait we check each time
-        print(occurrences)
-        output['matches'][i + 1] = {}
-        output['matches'][i + 1]['results'] = []
-        output['matches'][i + 1]['range'] = (
-            occurrences[occurrences.most_common()[-1][0]], occurrences[occurrences.most_common()[0]])
-        output['matches'][i + 1]['confidence'] = percentages_dict[str(scores_values[i])]
-        output['matches'][i + 1]['results'] = [(data[0], int(data[1])) for data in scores_data]
-        user.scores[leftover_traits[i]] = original_scores[leftover_traits[i]]
+        gross_scores = {}
+        accuracies, percetages = [], []
+        for j in range(20):
+            # get 1 more each iteration
+            random_traits = choices(population=leftover_traits, k=i + 1)
+            # get the prediction data from the KNN algorithm
+            scores_data = engine.predict_scores_knn(random_traits, return_all_scores=True)
+            # loop through all the scores (of the traits)
+            for score in scores_data:
+                trait_name, prediction, scores = score
+                user_score = user.scores[trait_name]
+                percetages.append((convert_scores_to_pecentage(Counter(scores))[prediction]))
+                accuracies.append(1 if int(user_score) == int(prediction) else 0)
+        gross_scores['average_accuracy'] = calculate_average_accuracy(accuracies)
+        gross_scores['percentages_range'] = (min(percetages), max(percetages))
+        output['matches'][i + 1] = gross_scores
     # return the output
     return output
+
+
+def load_x_scores(original_user, new_user, traits, x):
+    """
+    A simple algorithm that clears all but x traits of a user. This is used for computing the accuracy sheet
+    :param original_user: The original user with its scores
+    :param new_user: A new user which will have mutated scores
+    :param traits: The traits that are available to mutate
+    :param x: The amount of trait we can mutate
+    :return: a new user with x amount of mutated traits
+    """
+    # shuffle the traits so it is random
+    shuffle(traits)
+    # loop through the new users scores
+    for k, v in new_user.items():
+        # set the score default 0
+        new_user[k] = 0
+    # loop through all trait available to us
+    for i, trait in enumerate(traits):
+        # Set the score to the original score
+        new_user[trait] = original_user[trait]
+        # if we have reached the limit we return
+        if i == x:
+            return new_user
+    return new_user
