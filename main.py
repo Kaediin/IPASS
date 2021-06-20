@@ -1,6 +1,6 @@
 import json
 
-from utils import *
+from utils import Engine, get_dataset, generate_trait_accuracy
 
 if __name__ == '__main__':
     dataset = get_dataset(['data/dataset_2017.csv'])

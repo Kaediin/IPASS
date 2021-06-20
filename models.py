@@ -1,12 +1,9 @@
+from collections import Counter
 from copy import deepcopy
 from csv import reader as csv_reader
-from math import sqrt
-from random import choice, choices, randint, shuffle
-from collections import Counter
 from dataclasses import dataclass
-
-
-# A list with static trait-keywords. All the rows in the datasets have scores corresponding to these keys
+from math import sqrt
+from random import choice, randint
 
 
 @dataclass(frozen=False)

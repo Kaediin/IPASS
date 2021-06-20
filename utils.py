@@ -1,4 +1,5 @@
 from models import *
+from random import shuffle
 
 
 def get_empty_traits(user):
