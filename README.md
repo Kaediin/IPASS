@@ -34,16 +34,16 @@ All the datasets used for the algorithm. These dataset(s) container thousands of
 ### [Tests](tests)
 This directory houses all the files for the tests. We have 2 testfiles as we have 2 main classes. Each of the classes has their own sub-functions and helper-code to achieve its purposes. It is important to know that testing and validating functions are two very different things. Because the aim of the algorithm is to predict scores, we can test this by seeing if we get result. What result we get does not really matter as it is a prediction. It might not be a very accurate prediction but is to be determined by the validation.
 
-### [main.py](main.py)
+### [Main](main.py)
 A file with the main function tot test the code and fetch results. See below for intstructions on how to use.
 
-### [models.py](models.py)
+### [Models](models.py)
 This file container 2 classes. 1 controller class for the Dataset and the other for the engine. Each class has its own helper-functions and code to achieve their purposes. This file also houses a few object-models.
 
-### [plots](plots.py)
+### [Plots](plots.py)
 In this file there are functions that are able to plot certain candidate-score related computations. For exmaple: plot 100 candidates with half their scores predicted. The functions should be called from the [main file](main.py).
 
-### [utils](utils.py)
+### [Utils](utils.py)
 This utils file - as the same states - is file containing some utility-functions. Mainly to help functions in the [plots](plots.py) and [main](main.py) files. For example: getting all the empty traits from a user.
 
 ## Libraries used
