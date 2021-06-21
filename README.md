@@ -28,7 +28,23 @@ This algorithm is a prediction algorithm. Which - as the name says - is going to
 This engine is used for the benefit of the candidate. It is therefore important that the predictions of scores are accurate and reliable, but also that the candidate remains in control at all times. Using the dataset, large numbers of tests can be made that can contribute a lot to calibrating the engine in order to provide the most reliable result. The purpose of this engine is therefore to accurately, reliably and efficiently predict scores from non-completed assessment scores. With this data we can easily guide the candidate through the platform as a collaborative app.
 
 ## Repository-contents
+### [Data](data)
+All the datasets used for the algorithm. These dataset(s) container thousands of rows which each row being a candidate and its scores for every trait. The candidates (and their scores) are used for computing predictions.
 
+### [Tests](tests)
+This directory houses all the files for the tests. We have 2 testfiles as we have 2 main classes. Each of the classes has their own sub-functions and helper-code to achieve its purposes. It is important to know that testing and validating functions are two very different things. Because the aim of the algorithm is to predict scores, we can test this by seeing if we get result. What result we get does not really matter as it is a prediction. It might not be a very accurate prediction but is to be determined by the validation.
+
+### [main.py](main.py)
+A file with the main function tot test the code and fetch results. See below for intstructions on how to use.
+
+### [models.py](models.py)
+This file container 2 classes. 1 controller class for the Dataset and the other for the engine. Each class has its own helper-functions and code to achieve their purposes. This file also houses a few object-models.
+
+### [plots](plots.py)
+In this file there are functions that are able to plot certain candidate-score related computations. For exmaple: plot 100 candidates with half their scores predicted. The functions should be called from the [main file](main.py).
+
+### [utils](utils.py)
+This utils file - as the same states - is file containing some utility-functions. Mainly to help functions in the [plots](plots.py) and [main](main.py) files. For example: getting all the empty traits from a user.
 
 ## Libraries used
 ### [Matplotlib](https://matplotlib.org/stable/gallery/index.html)
