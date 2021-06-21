@@ -72,4 +72,4 @@ A very important Python library that can easily turn python classes into objects
 1. Clone this repo
 2. Make sure you have a virtual environment setup with the library [Matplotlib](https://matplotlib.org/stable/gallery/index.html) installed
 3. Run the main.py
-4. Change the functions, values, calles etc if needed in the main.py
+4. Change the functions, values, calls etc if needed in the main.py
