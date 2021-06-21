@@ -30,6 +30,26 @@ This engine is used for the benefit of the candidate. It is therefore important 
 ## Repository-contents
 
 
-## Libraries
+## Libraries used
+### Matplotlib
+This is only used to plot test cases. This way you can see the growth in accuracy or other similar interesting measurements. The impact of this library is only fairly large for the test cases.
+
+### Copy --> Deep copy
+This standard Python library is used to make deep copies. This is done so that we can make a copy of, for example, a candidate and thus know the original state. The impact of this library is quite large since making a copy of an object is done in a number of (important) places.
+
+### CSV --> Reader
+A standard Python library used to load CSV files. So these are the datasets I received from Eelloo. The impact of this library is great because the dataset is loaded with it.
+
+### Math --> Sqrt
+Python standard library that has useful tools such as a faster runtime for calculating the square root of a number. The impact of this library is very small. I could have coded such functions myself, but the runtime might have been longer. It's also nice that this comes standard in Python, so you don't have to install anything.
+
+### Random --> Choice, Randint, Shuffle
+Also a basic Python library that has useful tools to do anything arbitrary. This is implemented in a function that returns a random candidate from a list, and a function that returns a random number as a backup within certain limits. The impact of this function is very small as I could also have made tools myself. This library is standard in Python and that is the reason that I chose the library. Also a faster runtime.
+
+### Collections --> Counters
+A standard Python library can easily count how many times an element occurs in a list. This one has a significantly faster runtime than you would with pure-python. So the impact of this is huge.
+
+### Data classes --> Data class
+A very important Python library that can easily turn python classes into objects (dataclasses). This 'decorator[13]' is placed at the top of the class definition to show that it is a data class. The impact of this is very large.
 
 ## How-to-run
