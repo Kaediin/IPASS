@@ -69,3 +69,7 @@ A standard Python library can easily count how many times an element occurs in a
 A very important Python library that can easily turn python classes into objects (dataclasses). This 'decorator[13]' is placed at the top of the class definition to show that it is a data class. The impact of this is very large.
 
 ## How-to-run
+1. Clone this repo
+2. Make sure you have a virtual environment setup with the library [Matplotlib](https://matplotlib.org/stable/gallery/index.html) installed
+3. Run the main.py
+4. Change the functions, values, calles etc if needed in the main.py
