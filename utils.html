@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module utils</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>utils</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cskaed%5Cpycharmprojects%5Cipass%5Cutils.py">c:\users\skaed\pycharmprojects\ipass\utils.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calculate_average_accuracy"><strong>calculate_average_accuracy</strong></a>(accs)</dt><dd><tt>A&nbsp;simple&nbsp;function&nbsp;to&nbsp;calculate&nbsp;the&nbsp;average<br>
+:param&nbsp;accs:<br>
+:return:</tt></dd></dl>
+ <dl><dt><a name="-calculate_similarities"><strong>calculate_similarities</strong></a>(user_scores, predition_scores)</dt><dd><tt>This&nbsp;function&nbsp;counts&nbsp;the&nbsp;number&nbsp;of&nbsp;scores&nbsp;that&nbsp;are&nbsp;same&nbsp;so&nbsp;we&nbsp;know&nbsp;how&nbsp;accurate&nbsp;a&nbsp;computed&nbsp;list&nbsp;has&nbsp;been<br>
+:param&nbsp;user_scores:&nbsp;the&nbsp;scores&nbsp;of&nbsp;the&nbsp;user<br>
+:param&nbsp;predition_scores:&nbsp;the&nbsp;scores&nbsp;of&nbsp;the&nbsp;prediction<br>
+:return:&nbsp;a&nbsp;percentage&nbsp;of&nbsp;how&nbsp;many&nbsp;scores&nbsp;were&nbsp;the&nbsp;same&nbsp;of&nbsp;all&nbsp;the&nbsp;scores</tt></dd></dl>
+ <dl><dt><a name="-convert_scores_to_pecentage"><strong>convert_scores_to_pecentage</strong></a>(scores)</dt><dd><tt>This&nbsp;function&nbsp;takes&nbsp;in&nbsp;a&nbsp;dict&nbsp;of&nbsp;each&nbsp;unique&nbsp;score&nbsp;and&nbsp;the&nbsp;count&nbsp;of&nbsp;it,&nbsp;and&nbsp;return&nbsp;the&nbsp;%&nbsp;of&nbsp;the&nbsp;count<br>
+:param&nbsp;scores:&nbsp;the&nbsp;scores&nbsp;with&nbsp;it&nbsp;counts<br>
+:return:&nbsp;the&nbsp;dict&nbsp;with&nbsp;the&nbsp;unique&nbsp;scores&nbsp;but&nbsp;now&nbsp;the&nbsp;percentage&nbsp;as&nbsp;the&nbsp;value</tt></dd></dl>
+ <dl><dt><a name="-csv_reader"><strong>csv_reader</strong></a> = reader(...)</dt><dd><tt>csv_reader&nbsp;=&nbsp;reader(iterable&nbsp;[,&nbsp;dialect='excel']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[optional&nbsp;keyword&nbsp;args])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;row&nbsp;in&nbsp;csv_reader:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process(row)<br>
+&nbsp;<br>
+The&nbsp;"iterable"&nbsp;argument&nbsp;can&nbsp;be&nbsp;any&nbsp;object&nbsp;that&nbsp;returns&nbsp;a&nbsp;line<br>
+of&nbsp;input&nbsp;for&nbsp;each&nbsp;iteration,&nbsp;such&nbsp;as&nbsp;a&nbsp;file&nbsp;object&nbsp;or&nbsp;a&nbsp;list.&nbsp;&nbsp;The<br>
+optional&nbsp;"dialect"&nbsp;parameter&nbsp;is&nbsp;discussed&nbsp;below.&nbsp;&nbsp;The&nbsp;function<br>
+also&nbsp;accepts&nbsp;optional&nbsp;keyword&nbsp;arguments&nbsp;which&nbsp;override&nbsp;settings<br>
+provided&nbsp;by&nbsp;the&nbsp;dialect.<br>
+&nbsp;<br>
+The&nbsp;returned&nbsp;object&nbsp;is&nbsp;an&nbsp;iterator.&nbsp;&nbsp;Each&nbsp;iteration&nbsp;returns&nbsp;a&nbsp;row<br>
+of&nbsp;the&nbsp;CSV&nbsp;file&nbsp;(which&nbsp;can&nbsp;span&nbsp;multiple&nbsp;input&nbsp;lines).</tt></dd></dl>
+ <dl><dt><a name="-generate_trait_accuracy"><strong>generate_trait_accuracy</strong></a>(trait_data, user, dataset)</dt><dd><tt>A&nbsp;complex&nbsp;function&nbsp;that&nbsp;calculates&nbsp;to&nbsp;accuracy&nbsp;of&nbsp;every&nbsp;trait&nbsp;with&nbsp;every&nbsp;number&nbsp;of&nbsp;valid&nbsp;scores.<br>
+We&nbsp;do&nbsp;this&nbsp;before&nbsp;hand&nbsp;so&nbsp;that&nbsp;we&nbsp;can&nbsp;display&nbsp;some&nbsp;kind&nbsp;of&nbsp;accuracy&nbsp;indication&nbsp;in&nbsp;the&nbsp;boxplots.<br>
+These&nbsp;values&nbsp;are&nbsp;not&nbsp;100%&nbsp;accurate,&nbsp;but&nbsp;nothing&nbsp;is&nbsp;really...<br>
+:param&nbsp;trait_data:&nbsp;The&nbsp;data&nbsp;of&nbsp;the&nbsp;known&nbsp;traits<br>
+:param&nbsp;user:&nbsp;the&nbsp;user&nbsp;we&nbsp;use&nbsp;to&nbsp;compute<br>
+:param&nbsp;dataset:&nbsp;the&nbsp;dataset<br>
+:return:&nbsp;the&nbsp;output.&nbsp;A&nbsp;dictionary&nbsp;with&nbsp;every&nbsp;trait&nbsp;which&nbsp;has&nbsp;79&nbsp;trait&nbsp;combinations&nbsp;(in&nbsp;length)&nbsp;each.</tt></dd></dl>
+ <dl><dt><a name="-get_dataset"><strong>get_dataset</strong></a>(paths)</dt><dd><tt>A&nbsp;simple&nbsp;function&nbsp;to&nbsp;load&nbsp;in&nbsp;the&nbsp;dataset&nbsp;from&nbsp;(multiple)&nbsp;path(s)<br>
+:param&nbsp;paths:&nbsp;the&nbsp;paths&nbsp;to&nbsp;the&nbsp;datasets<br>
+:return:&nbsp;the&nbsp;loaded&nbsp;dataset-controller&nbsp;class&nbsp;with&nbsp;its&nbsp;attributes</tt></dd></dl>
+ <dl><dt><a name="-get_empty_traits"><strong>get_empty_traits</strong></a>(user)</dt><dd><tt>returns&nbsp;a&nbsp;list&nbsp;with&nbsp;trait-keywords&nbsp;of&nbsp;all&nbsp;the&nbsp;empty&nbsp;traits&nbsp;(score&nbsp;=&nbsp;0)<br>
+:param&nbsp;user:&nbsp;the&nbsp;user&nbsp;we&nbsp;want&nbsp;to&nbsp;check<br>
+:return:&nbsp;a&nbsp;list&nbsp;of&nbsp;trait-names</tt></dd></dl>
+ <dl><dt><a name="-load_x_scores"><strong>load_x_scores</strong></a>(original_user, new_user, traits, x)</dt><dd><tt>A&nbsp;simple&nbsp;algorithm&nbsp;that&nbsp;clears&nbsp;all&nbsp;but&nbsp;x&nbsp;traits&nbsp;of&nbsp;a&nbsp;user.&nbsp;This&nbsp;is&nbsp;used&nbsp;for&nbsp;computing&nbsp;the&nbsp;accuracy&nbsp;sheet<br>
+:param&nbsp;original_user:&nbsp;The&nbsp;original&nbsp;user&nbsp;with&nbsp;its&nbsp;scores<br>
+:param&nbsp;new_user:&nbsp;A&nbsp;new&nbsp;user&nbsp;which&nbsp;will&nbsp;have&nbsp;mutated&nbsp;scores<br>
+:param&nbsp;traits:&nbsp;The&nbsp;traits&nbsp;that&nbsp;are&nbsp;available&nbsp;to&nbsp;mutate<br>
+:param&nbsp;x:&nbsp;The&nbsp;amount&nbsp;of&nbsp;trait&nbsp;we&nbsp;can&nbsp;mutate<br>
+:return:&nbsp;a&nbsp;new&nbsp;user&nbsp;with&nbsp;x&nbsp;amount&nbsp;of&nbsp;mutated&nbsp;traits</tt></dd></dl>
+ <dl><dt><a name="-map_calculated_scores_to_user"><strong>map_calculated_scores_to_user</strong></a>(predictions, user)</dt><dd><tt>This&nbsp;function&nbsp;replaces&nbsp;the&nbsp;previous&nbsp;scores&nbsp;(only&nbsp;0's&nbsp;in&nbsp;production)&nbsp;with&nbsp;the&nbsp;computed&nbsp;scores)<br>
+:param&nbsp;predictions:&nbsp;the&nbsp;list&nbsp;of&nbsp;prediction-scores<br>
+:param&nbsp;user:&nbsp;the&nbsp;user&nbsp;with&nbsp;its&nbsp;(original)&nbsp;scores<br>
+:return:&nbsp;the&nbsp;user&nbsp;with&nbsp;its&nbsp;new&nbsp;scores</tt></dd></dl>
+ <dl><dt><a name="-sqrt"><strong>sqrt</strong></a>(x, /)</dt><dd><tt>Return&nbsp;the&nbsp;square&nbsp;root&nbsp;of&nbsp;x.</tt></dd></dl>
+</td></tr></table>
+</body></html>

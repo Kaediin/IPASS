@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>plots</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cskaed%5Cpycharmprojects%5Cipass%5Cplots.py">c:\users\skaed\pycharmprojects\ipass\plots.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-compute_predictions"><strong>compute_predictions</strong></a>(user, engine)</dt><dd><tt>A&nbsp;simple&nbsp;helper&nbsp;function&nbsp;that&nbsp;computes&nbsp;predictions&nbsp;with&nbsp;all&nbsp;the&nbsp;algorithms&nbsp;at&nbsp;the&nbsp;same&nbsp;time&nbsp;of&nbsp;a&nbsp;user.&nbsp;Used&nbsp;for&nbsp;plots.<br>
+:param&nbsp;user:&nbsp;the&nbsp;user<br>
+:param&nbsp;engine:&nbsp;the&nbsp;engine<br>
+:return:</tt></dd></dl>
+ <dl><dt><a name="-compute_scores_all_algorithms"><strong>compute_scores_all_algorithms</strong></a>(data, interations, incremented_trait_limit=False)</dt><dd><tt>A&nbsp;function&nbsp;that&nbsp;computed&nbsp;scores&nbsp;for&nbsp;x&nbsp;amount&nbsp;of&nbsp;users.&nbsp;With&nbsp;helps&nbsp;of&nbsp;other&nbsp;classes&nbsp;in&nbsp;this&nbsp;script.<br>
+:param&nbsp;data:&nbsp;the&nbsp;dataset<br>
+:param&nbsp;interations:&nbsp;amount&nbsp;of&nbsp;iterations&nbsp;(new&nbsp;users)<br>
+:param&nbsp;incremented_trait_limit:&nbsp;determines&nbsp;if&nbsp;the&nbsp;trait_limit&nbsp;should&nbsp;increment&nbsp;or&nbsp;not.&nbsp;Used&nbsp;for&nbsp;different&nbsp;plots<br>
+:return:&nbsp;the&nbsp;predictions&nbsp;of&nbsp;each&nbsp;algorithm&nbsp;with&nbsp;the&nbsp;length&nbsp;of&nbsp;'iterations'</tt></dd></dl>
+ <dl><dt><a name="-csv_reader"><strong>csv_reader</strong></a> = reader(...)</dt><dd><tt>csv_reader&nbsp;=&nbsp;reader(iterable&nbsp;[,&nbsp;dialect='excel']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[optional&nbsp;keyword&nbsp;args])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;row&nbsp;in&nbsp;csv_reader:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process(row)<br>
+&nbsp;<br>
+The&nbsp;"iterable"&nbsp;argument&nbsp;can&nbsp;be&nbsp;any&nbsp;object&nbsp;that&nbsp;returns&nbsp;a&nbsp;line<br>
+of&nbsp;input&nbsp;for&nbsp;each&nbsp;iteration,&nbsp;such&nbsp;as&nbsp;a&nbsp;file&nbsp;object&nbsp;or&nbsp;a&nbsp;list.&nbsp;&nbsp;The<br>
+optional&nbsp;"dialect"&nbsp;parameter&nbsp;is&nbsp;discussed&nbsp;below.&nbsp;&nbsp;The&nbsp;function<br>
+also&nbsp;accepts&nbsp;optional&nbsp;keyword&nbsp;arguments&nbsp;which&nbsp;override&nbsp;settings<br>
+provided&nbsp;by&nbsp;the&nbsp;dialect.<br>
+&nbsp;<br>
+The&nbsp;returned&nbsp;object&nbsp;is&nbsp;an&nbsp;iterator.&nbsp;&nbsp;Each&nbsp;iteration&nbsp;returns&nbsp;a&nbsp;row<br>
+of&nbsp;the&nbsp;CSV&nbsp;file&nbsp;(which&nbsp;can&nbsp;span&nbsp;multiple&nbsp;input&nbsp;lines).</tt></dd></dl>
+ <dl><dt><a name="-plot_data"><strong>plot_data</strong></a>(title, algorithm_data, yticks, ylabel, xlabel, savefig)</dt><dd><tt>The&nbsp;function&nbsp;that&nbsp;plots&nbsp;the&nbsp;info<br>
+:param&nbsp;title:&nbsp;title&nbsp;of&nbsp;the&nbsp;plot<br>
+:param&nbsp;algorithm_data:&nbsp;the&nbsp;amount&nbsp;of&nbsp;lines,&nbsp;their&nbsp;labels,&nbsp;colors&nbsp;etc.<br>
+:param&nbsp;yticks:&nbsp;The&nbsp;yaxis&nbsp;steps<br>
+:param&nbsp;ylabel:&nbsp;the&nbsp;y&nbsp;label<br>
+:param&nbsp;xlabel:&nbsp;the&nbsp;x&nbsp;labl<br>
+:param&nbsp;savefig:&nbsp;filepath&nbsp;to&nbsp;save&nbsp;it&nbsp;to<br>
+:return:&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-plot_engine_x_candidates"><strong>plot_engine_x_candidates</strong></a>(data, x=101)</dt><dd><tt>A&nbsp;function&nbsp;that&nbsp;plots&nbsp;x&nbsp;amount&nbsp;of&nbsp;candidates&nbsp;and&nbsp;the&nbsp;prediction&nbsp;of&nbsp;half&nbsp;their&nbsp;scores.<br>
+:param&nbsp;data:&nbsp;the&nbsp;dataset<br>
+:param&nbsp;x:&nbsp;the&nbsp;amount&nbsp;of&nbsp;candidates&nbsp;to&nbsp;plot<br>
+:return:&nbsp;Nothing</tt></dd></dl>
+ <dl><dt><a name="-plot_engine_x_traits"><strong>plot_engine_x_traits</strong></a>(data)</dt><dd><tt>A&nbsp;function&nbsp;that&nbsp;plots&nbsp;all&nbsp;the&nbsp;traits&nbsp;and&nbsp;incrementing&nbsp;the&nbsp;known&nbsp;scores&nbsp;by&nbsp;1&nbsp;each&nbsp;iteration<br>
+:param&nbsp;data:&nbsp;the&nbsp;dataset</tt></dd></dl>
+ <dl><dt><a name="-sqrt"><strong>sqrt</strong></a>(x, /)</dt><dd><tt>Return&nbsp;the&nbsp;square&nbsp;root&nbsp;of&nbsp;x.</tt></dd></dl>
+</td></tr></table>
+</body></html>
