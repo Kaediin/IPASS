@@ -29,44 +29,44 @@ This engine is used for the benefit of the candidate. It is therefore important 
 
 ## Repository-contents
 ### [Data](data)
-All the datasets used for the algorithm. These dataset(s) container thousands of rows which each row being a candidate and its scores for every trait. The candidates (and their scores) are used for computing predictions.
+All the datasets used for the algorithm. These dataset(s) contain thousands of rows with each row being a candidate and its scores for every trait. The candidates (and their scores) are used for computing predictions.
 
 ### [Tests](tests)
-This directory houses all the files for the tests. We have 2 testfiles as we have 2 main classes. Each of the classes has their own sub-functions and helper-code to achieve its purposes. It is important to know that testing and validating functions are two very different things. Because the aim of the algorithm is to predict scores, we can test this by seeing if we get result. What result we get does not really matter as it is a prediction. It might not be a very accurate prediction but is to be determined by the validation.
+This directory houses all the files for the tests. We have 2 testfiles as we have 2 main classes. Each of the classes has their own sub-functions and helper-code to achieve their purposes. It is important to know that testing and validating functions are two very different things. Because the aim of the algorithm is to predict scores, we can test this by seeing if we get result. What result we get does not really matter as it is a prediction. It might not be a very accurate prediction but that is to be determined by the validation.
 
 ### [Main](main.py)
 A file with the main function tot test the code and fetch results. See below for intstructions on how to use.
 
 ### [Models](models.py)
-This file container 2 classes. 1 controller class for the Dataset and the other for the engine. Each class has its own helper-functions and code to achieve their purposes. This file also houses a few object-models.
+This file contains 2 classes. 1 controller class for the Dataset and the other for the engine. Each class has its own helper-functions and code to achieve their purposes. This file also houses a few object-models.
 
 ### [Plots](plots.py)
-In this file there are functions that are able to plot certain candidate-score related computations. For exmaple: plot 100 candidates with half their scores predicted. The functions should be called from the [main file](main.py).
+In this file there are functions that are able to plot certain candidate-score related computations. For exmaple: plot 100 candidates with half their scores predicted. These functions should be called from the [main file](main.py).
 
 ### [Utils](utils.py)
-This utils file - as the same states - is file containing some utility-functions. Mainly to help functions in the [plots](plots.py) and [main](main.py) files. For example: getting all the empty traits from a user.
+This utils file - as the name states - is a file containing some utility-functions. Mainly to help functions in the [plots](plots.py) and [main](main.py) files. For example: getting all the empty traits from a user.
 
 ## Libraries used
 ### [Matplotlib](https://matplotlib.org/stable/gallery/index.html)
 This is only used to plot test cases. This way you can see the growth in accuracy or other similar interesting measurements. The impact of this library is only fairly large for the test cases.
 
 ### Copy --> [Deep copy](https://docs.python.org/3/library/copy.html)
-This standard Python library is used to make deep copies. This is done so that we can make a copy of, for example, a candidate and thus know the original state. The impact of this library is quite large since making a copy of an object is done in a number of (important) places.
+This standard Python library is used to make deep copies. This is done so that we can make a copy of, for example, a candidate and thus keep the original values. The impact of this library is quite large since making a copy of an object is done in a number of (important) places.
 
 ### CSV --> [Reader](https://docs.python.org/3/library/csv.html)
-A standard Python library used to load CSV files. So these are the datasets I received from Eelloo. The impact of this library is great because the dataset is loaded with it.
+A standard Python library used to load CSV files. These are the datasets I received from Eelloo. The impact of this library is great because the dataset is loaded through it.
 
 ### Math --> [Sqrt](https://docs.python.org/3/library/math.html)
-Python standard library that has useful tools such as a faster runtime for calculating the square root of a number. The impact of this library is very small. I could have coded such functions myself, but the runtime might have been longer. It's also nice that this comes standard in Python, so you don't have to install anything.
+Python standard library that has useful tools such as a faster runtime for calculating the square root of a number. The impact of this library is very small. I could have coded such functions myself, but the runtime might have been slightly longer. It's also nice that this comes standard in Python, so you don't have to install anything.
 
 ### Random --> [Choice](https://docs.python.org/3/library/random.html#functions-for-sequences), [Randint](https://docs.python.org/3/library/random.html#functions-for-integers), [Shuffle](https://docs.python.org/3/library/random.html#functions-for-sequences)
-Also a basic Python library that has useful tools to do anything arbitrary. This is implemented in a function that returns a random candidate from a list, and a function that returns a random number as a backup within certain limits. The impact of this function is very small as I could also have made tools myself. This library is standard in Python and that is the reason that I chose the library. Also a faster runtime.
+Also a basic Python library that has useful tools to do anything arbitrary. This is implemented in a function that returns a random candidate from a list, and a function that returns a random number as a backup within certain limits. The impact of this function is very small as I could also have made tools myself. This library is standard in Python and that is the reason that I chose the library. It also has a faster runtime.
 
 ### Collections --> [Counters](https://docs.python.org/3/library/collections.html#counter-objects)
-A standard Python library can easily count how many times an element occurs in a list. This one has a significantly faster runtime than you would with pure-python. So the impact of this is huge.
+A standard Python library can easily count how many times an element occurs in a list. This one has a significantly faster runtime than what you would have with pure-python. So the impact of this is huge.
 
 ### Data classes --> [Data class](https://docs.python.org/3/library/dataclasses.html)
-A very important Python library that can easily turn python classes into objects (dataclasses). This 'decorator[13]' is placed at the top of the class definition to show that it is a data class. The impact of this is very large.
+A very important Python library that can easily turn python classes into objects (dataclasses). This decorator is placed at the top of the class definition to show that it is a data class. The impact of this is very large.
 
 ## How-to-run
 1. Clone this repo
