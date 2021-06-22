@@ -1,4 +1,6 @@
+import plots
 from utils import Engine, get_dataset, get_empty_traits, map_calculated_scores_to_user, calculate_similarities
+from plots import *
 
 if __name__ == '__main__':
     # Get and load the dataset
@@ -19,3 +21,6 @@ if __name__ == '__main__':
     percentage_same_scores = calculate_similarities(user_original_scores.scores.values(), user.scores.values())
     # Print output
     print(f'Prediction for user {user.id} has a {round(percentage_same_scores, 3)}% accuracy!')
+
+    # Predict half of the traits of 100 candidates. Plot the accuracy of each:
+    plots.plot_engine_x_candidates(dataset)

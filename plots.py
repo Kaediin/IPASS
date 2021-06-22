@@ -65,7 +65,7 @@ def plot_engine_x_candidates(data, x=101):
     p_UPCF, p_mean, p_knn = compute_scores_all_algorithms(data, x)
 
     plot_data(
-        'Prediction-accuracy of 39/79 traits over 100 candidates (2017 + 2018 data)',
+        'Prediction-accuracy of 39/79 traits over 100 candidates (2017 data)',
         [(p_UPCF, "UPCF", f'Average UPCF: {round(calculate_average_accuracy(p_UPCF), 3)}%', 'purple'),
          (p_mean, "Mean", f'Average Mean: {round(calculate_average_accuracy(p_mean), 3)}%', 'blue'),
          (p_knn, "KNN", f'Average KNN: {round(calculate_average_accuracy(p_knn), 3)}%', 'green')],
@@ -84,7 +84,7 @@ def plot_engine_x_traits(data):
     p_UPCF, p_mean, p_knn = compute_scores_all_algorithms(data, len(data.trait_keywords), incremented_trait_limit=True)
 
     plot_data(
-        'Prediction-accuracy over x amount of undetermined traits (2017 + 2018 data)',
+        'Prediction-accuracy over x amount of undetermined traits (2017 data)',
         [(p_UPCF, "UPCF", f'Average UPCF: {round(calculate_average_accuracy(p_UPCF), 3)}%', 'purple'),
          (p_mean, "Mean", f'Average Mean: {round(calculate_average_accuracy(p_mean), 3)}%', 'blue'),
          (p_knn, "KNN", f'Average KNN: {round(calculate_average_accuracy(p_knn), 3)}%', 'green')],
